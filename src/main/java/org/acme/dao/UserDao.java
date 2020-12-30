@@ -3,7 +3,6 @@ package org.acme.dao;
 import org.acme.entities.*;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
@@ -28,6 +27,7 @@ public class UserDao extends DaoManager<User> {
 
     public User find(Long id){
         //return find(id,User.class);
+        //siccome teplates è LAZY devo fare la join altrimenti per evitare la join dovrei metterlo a EAGER
         TypedQuery<User> query = entityManager.createQuery("from User u join fetch u.templates t where u.id= :userId", User.class).setParameter("userId", id);
         return query.getResultList().get(0);
     }
