@@ -1,17 +1,26 @@
 package org.acme.resteasyjackson;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.quarkus.jackson.ObjectMapperCustomizer;
+import io.quarkus.jsonb.JsonbConfigCustomizer;
 
 import javax.inject.Singleton;
+import javax.json.bind.JsonbConfig;
 
-@Singleton
-public class MyObjectMapperCustomizer implements ObjectMapperCustomizer {
+//@Singleton
+public class MyObjectMapperCustomizer
+        //implements JsonbConfigCustomizer  //JSONB (jsonb default not admit null field!)
+{
+//    @Override
+//    public void customize(JsonbConfig config) {
+//        // To suppress serializing properties with null values
+//        config.withPropertyNamingStrategy(JsonbConfig.NULL_VALUES);
+//    }
 
-    @Override
-    public void customize(ObjectMapper objectMapper) {
-        // To suppress serializing properties with null values
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-    }
+
+//public class MyObjectMapperCustomizer implements ObjectMapperCustomizer { //JSONP with Jackson (default admit null field so exclude them here!)
+//
+//    @Override
+//    public void customize(ObjectMapper objectMapper) {
+//        // To suppress serializing properties with null values
+//        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+//    }
 }

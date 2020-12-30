@@ -5,7 +5,9 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "TEMPLATE")
-public class Template implements IEntity<Long> {
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "TEMPLATE_TYPE")
+public abstract class Template implements IEntity<Long> {
 
     private Long id;
 
@@ -15,7 +17,7 @@ public class Template implements IEntity<Long> {
 
     private User user;
 
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     public Long getId() {
         return id;

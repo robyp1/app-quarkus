@@ -12,7 +12,7 @@ import javax.persistence.EntityManager;
 public abstract class DaoManager<T extends IEntity<?>> implements IDao<T> {
 
     @Inject
-    private EntityManager entityManager;
+    protected EntityManager entityManager;
 
 
     public <T> T update(T entity) {
@@ -23,13 +23,14 @@ public abstract class DaoManager<T extends IEntity<?>> implements IDao<T> {
         entityManager.remove(entity);
     }
 
-    public <T> T selectSingleResult(String sql, Class<T> theClass) {
-        return entityManager.createQuery(sql, theClass).getSingleResult();
+    public <T> T find(Long id, Class<T> theClass) {
+        return entityManager.find(theClass, id);
     }
 
     @Override
     public void flush() {
         entityManager.flush();
+        entityManager.clear();
     }
 
     public <T> void save(T entity) {

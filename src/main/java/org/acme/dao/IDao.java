@@ -13,7 +13,7 @@ public interface IDao<T extends IEntity<?>> {
 
     <T> void delete(T entity);
 
-    <T> T selectSingleResult(String sql, Class<T> theClass);
+    public <T> T find(Long id, Class<T> theClass);
 
     void flush();
 

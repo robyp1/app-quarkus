@@ -33,6 +33,10 @@ public class User implements IEntity<Long>{
         this.templates = templates;
     }
 
+    public User(Long id) {
+        this.id=id;
+    }
+
     @GeneratedValue
     @Id
     public Long getId() {
