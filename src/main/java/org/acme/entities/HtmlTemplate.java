@@ -3,6 +3,9 @@ package org.acme.entities;
 import javax.persistence.*;
 import java.util.Objects;
 
+/**
+ * see ER diagram image for clarify entity class composition "tabelle templates diegaramma ER.PNG"
+ */
 @Entity
 @Table(name = "HTML_TEMPLATE")
 @DiscriminatorValue("HTML")

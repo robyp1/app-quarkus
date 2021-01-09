@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
 @ApplicationScoped
-@Default
+//@Default
 public abstract class DaoManager<T extends IEntity<?>> implements IDao<T> {
 
     @Inject

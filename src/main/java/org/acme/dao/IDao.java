@@ -5,7 +5,7 @@ import org.acme.entities.SexType;
 
 import java.io.Serializable;
 
-public interface IDao<T extends IEntity<?>> {
+public interface IDao<T extends IEntity<?>> extends Serializable {
 
     <T> void save(T entity);
 

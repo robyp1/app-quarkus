@@ -3,6 +3,11 @@ package org.acme.entities;
 import javax.persistence.*;
 import java.util.Objects;
 
+/**
+ * see ER diagram image for clarify entity class composition "tabelle templates diegaramma ER.PNG"
+ *
+ * column template_type contains discriminatorValue string TXT for TXT_TEMPLATE or HTML for HTML_TEMPLATE
+ */
 @Entity
 @Table(name = "TEMPLATE")
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -47,7 +52,7 @@ public abstract class Template implements IEntity<Long> {
     }
 
     @ManyToOne(targetEntity = User.class)
-    @JoinColumn(name="USER_OWNER_ID")
+    @JoinColumn(name="USER_OWNER_ID") //this column have a foreign key
     public User getUser() {
         return user;
     }
