@@ -9,7 +9,7 @@ import java.util.Objects;
  * see ER diagram image for clarify entity class composition "tabelle templates diegaramma ER.PNG"
  */
 @Entity
-@Table(name = "USER")
+@Table(name = "USERS")
 public class User implements IEntity<Long>{
 
     private Long id;
