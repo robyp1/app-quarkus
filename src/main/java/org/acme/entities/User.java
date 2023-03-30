@@ -78,6 +78,13 @@ public class User implements IEntity<Long>{
         this.sexType = sexType;
     }
 
+    /**
+     * orphanRemoval: when you remove element in the list, it removes also the foreign key, otherwise it delete only fk in this table
+     * and not the record referenced in template table
+     * CascaType.ALL it pass state of persist, merge,delete also in the table referenced (delete must be associated with orphamRemoval too)
+     * mapped is the name of java property in the referenced table
+     * @return
+     */
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     public List<Template> getTemplates() {
         return templates;
@@ -88,9 +95,16 @@ public class User implements IEntity<Long>{
     }
 
     /*add a template to list*/
-    public void addTemplate(Template template){
+    public User addTemplate(Template template){
         template.setUser(this);
         this.templates.add(template);
+        return this;
+    }
+
+    public User removeTemplate(Template template){
+        this.templates.remove(template);
+        this.addTemplate(null);
+        return this;
     }
 
     @Override
