@@ -1,6 +1,7 @@
 package org.acme;
 
 import org.acme.dao.IDao;
+import org.acme.dao.MapperDto;
 import org.acme.dao.UserDao;
 import org.acme.daoLambda.DaoManagerLambda;
 import org.acme.daoLambda.UserFunctions;
@@ -37,13 +38,17 @@ public class ApplicationResource {
     @IDaoManagerUser(EntityTypeEnum.USER)
     private IDao userDaoProduced;
 
+
+    @Inject
+    private MapperDto mapperDto;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public TemplateJson hello() {
         Long id = userDao.setPrincipalUserDefaultTemplate("Roby", "P", SexType.M);
         User user = userDao.find(id);
         HtmlTemplate template = (HtmlTemplate) user.getTemplates().get(0);
-        return new TemplateJson(template.getId(), user.getName(), template.getTemplateType(), template.getHead() + template.getBody(), String.valueOf(user.getId()));
+        return mapperDto.htmlTemplateToTemplateJson(user, template);
         //return "Hello RESTEasy with Quarkus!";
     }
 
@@ -57,7 +62,7 @@ public class ApplicationResource {
         IEntity<Long> entity2 = daoManagerLambda.find(userFunctions::findUser, entity.getId());
         User user = (User) entity2;
         HtmlTemplate template = (HtmlTemplate) user.getTemplates().get(0);
-        return new TemplateJson(template.getId(), user.getName(), template.getTemplateType(), template.getHead() + template.getBody(), String.valueOf(user.getId()));
+        return mapperDto.htmlTemplateToTemplateJson(user, template);
     }
 
 
@@ -68,7 +73,8 @@ public class ApplicationResource {
         Long id = ((UserDaoProducer) userDaoProduced).setPrincipalUserDefaultTemplate("Roby3", "P", SexType.M);
         User user = ((UserDaoProducer) userDaoProduced).find(id);
         HtmlTemplate template = (HtmlTemplate) user.getTemplates().get(0);
-        return new TemplateJson(template.getId(), user.getName(), template.getTemplateType(), template.getHead() + template.getBody(), String.valueOf(user.getId()));
+        return mapperDto.htmlTemplateToTemplateJson(user, template);
         //return "Hello RESTEasy with Quarkus!";
     }
+
 }
