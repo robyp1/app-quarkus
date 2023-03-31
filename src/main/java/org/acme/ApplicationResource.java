@@ -13,13 +13,20 @@ import org.acme.entities.IEntity;
 import org.acme.entities.SexType;
 import org.acme.entities.User;
 import org.acme.resteasyjackson.TemplateJson;
+import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 
 @Path("/hello-resteasy")
 public class ApplicationResource {
@@ -41,6 +48,12 @@ public class ApplicationResource {
 
     @Inject
     private MapperDto mapperDto;
+
+//    @Inject
+    private Logger logger = Logger.getLogger(ApplicationResource.class);
+
+    @Context
+    private UriInfo uriInfo;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -67,14 +80,23 @@ public class ApplicationResource {
 
 
     @GET
-    @Path("/hello3")
+    @Path("/hello3/{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public TemplateJson hello3() {
-        Long id = ((UserDaoProducer) userDaoProduced).setPrincipalUserDefaultTemplate("Roby3", "P", SexType.M);
+    public TemplateJson hello3(@PathParam("name") final String name) {
+        Long id = ((UserDaoProducer) userDaoProduced).setPrincipalUserDefaultTemplate(name, "P", SexType.M);
         User user = ((UserDaoProducer) userDaoProduced).find(id);
         HtmlTemplate template = (HtmlTemplate) user.getTemplates().get(0);
         return mapperDto.htmlTemplateToTemplateJson(user, template);
         //return "Hello RESTEasy with Quarkus!";
     }
 
+    @GET
+    @Path("/hello34")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response redirectAndResponse(){
+        final String userName = "redirectUser" + System.currentTimeMillis();
+        final URI redirectHello3 = uriInfo.getBaseUriBuilder().path(ApplicationResource.class).path(ApplicationResource.class, "hello3").build(userName);
+        logger.info("Redirect user " + userName);
+        return Response.status(Response.Status.SEE_OTHER).header(HttpHeaders.LOCATION,redirectHello3).build();
+    }
 }

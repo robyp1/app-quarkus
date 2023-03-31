@@ -77,6 +77,11 @@
       <version>${mapstruct.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.jboss.logmanager</groupId>
+      <artifactId>log4j2-jboss-logmanager</artifactId>
+    </dependency>
+
   </dependencies>
   <build>
     <plugins>
