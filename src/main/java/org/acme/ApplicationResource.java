@@ -1,5 +1,6 @@
 package org.acme;
 
+import org.acme.countryResponse.Country;
 import org.acme.dao.IDao;
 import org.acme.dao.MapperDto;
 import org.acme.dao.UserDao;
@@ -13,6 +14,7 @@ import org.acme.entities.IEntity;
 import org.acme.entities.SexType;
 import org.acme.entities.User;
 import org.acme.resteasyjackson.TemplateJson;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
@@ -49,6 +51,10 @@ public class ApplicationResource {
     @Inject
     private MapperDto mapperDto;
 
+    @Inject
+    @RestClient
+    CountryRemoteResource countryRemoteResource;
+
 //    @Inject
     private Logger logger = Logger.getLogger(ApplicationResource.class);
 
@@ -62,7 +68,6 @@ public class ApplicationResource {
         User user = userDao.find(id);
         HtmlTemplate template = (HtmlTemplate) user.getTemplates().get(0);
         return mapperDto.htmlTemplateToTemplateJson(user, template);
-        //return "Hello RESTEasy with Quarkus!";
     }
 
 
@@ -87,7 +92,6 @@ public class ApplicationResource {
         User user = ((UserDaoProducer) userDaoProduced).find(id);
         HtmlTemplate template = (HtmlTemplate) user.getTemplates().get(0);
         return mapperDto.htmlTemplateToTemplateJson(user, template);
-        //return "Hello RESTEasy with Quarkus!";
     }
 
     @GET
@@ -98,5 +102,13 @@ public class ApplicationResource {
         final URI redirectHello3 = uriInfo.getBaseUriBuilder().path(ApplicationResource.class).path(ApplicationResource.class, "hello3").build(userName);
         logger.info("Redirect user " + userName);
         return Response.status(Response.Status.SEE_OTHER).header(HttpHeaders.LOCATION,redirectHello3).build();
+    }
+
+    @GET
+    @Path("/helloForRemote")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Country CallRemoteRest(){
+        Country[] countryInfo = countryRemoteResource.getCountryBy("italy");
+        return countryInfo[0];
     }
 }
