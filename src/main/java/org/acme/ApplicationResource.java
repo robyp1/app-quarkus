@@ -107,8 +107,13 @@ public class ApplicationResource {
     @GET
     @Path("/helloForRemote")
     @Produces({MediaType.APPLICATION_JSON})
-    public Country CallRemoteRest(){
-        Country[] countryInfo = countryRemoteResource.getCountryBy("italy");
-        return countryInfo[0];
+    public Response CallRemoteRest(){
+        Country[] countryInfo;
+        try {
+            countryInfo = countryRemoteResource.getCountryBy("italy");
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed "+ e.getMessage()).build();
+        }
+        return Response.status(Response.Status.OK).entity(countryInfo[0]).build();
     }
 }
