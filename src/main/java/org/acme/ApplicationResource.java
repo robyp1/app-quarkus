@@ -14,6 +14,7 @@ import org.acme.entities.IEntity;
 import org.acme.entities.SexType;
 import org.acme.entities.User;
 import org.acme.resteasyjackson.TemplateJson;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 
@@ -29,6 +30,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.Optional;
 
 @Path("/hello-resteasy")
 public class ApplicationResource {
@@ -61,10 +63,18 @@ public class ApplicationResource {
     @Context
     private UriInfo uriInfo;
 
+    @Inject
+    @ConfigProperty(name="name.saved", defaultValue = "RobyDefault")
+    Optional<String> nameToSave;//empty optional is injected if property doesn't exist in application
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public TemplateJson hello() {
-        Long id = userDao.setPrincipalUserDefaultTemplate("Roby", "P", SexType.M);
+        logger.info("Default name read from configuration " + nameToSave);
+//        String nameToBeSave = this.nameToBeSave.orElse("Roby"); ho specificato default valiue altrimenti devo usare orElse
+        String nameToBeSave = this.nameToSave.get();
+        logger.info("Default name used " + nameToBeSave);
+        Long id = userDao.setPrincipalUserDefaultTemplate(nameToBeSave, "P", SexType.M);
         User user = userDao.find(id);
         HtmlTemplate template = (HtmlTemplate) user.getTemplates().get(0);
         return mapperDto.htmlTemplateToTemplateJson(user, template);
