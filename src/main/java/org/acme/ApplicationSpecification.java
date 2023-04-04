@@ -7,7 +7,7 @@ import org.eclipse.microprofile.openapi.annotations.info.License;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @OpenAPIDefinition(
-        tags = {@Tag(name="test", description = "test desc")},
+        tags = {@Tag(name="test2", description = "test desc")},
         info = @Info( title="Example API",
                 version = "1.0.1",
                 contact = @Contact(
