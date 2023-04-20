@@ -1,5 +1,6 @@
 package org.acme.daoProducer;
 
+import io.quarkus.arc.DefaultBean;
 import org.acme.dao.IDao;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -26,6 +27,7 @@ public class DaoManagerFactory implements Serializable {
      */
     @Produces
     @IDaoManagerUser(EntityTypeEnum.USER)
+    @DefaultBean
     public IDao getUserManager() {
         return userDaoProducer;
     }

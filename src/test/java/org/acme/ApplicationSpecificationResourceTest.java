@@ -1,13 +1,23 @@
 package org.acme;
 
 import io.quarkus.test.junit.QuarkusTest;
+import org.acme.dao.IDao;
+import org.acme.daoProducer.EntityTypeEnum;
+import org.acme.daoProducer.IDaoManagerUser;
+import org.acme.daoProducer.UserDaoProducerTest;
 import org.junit.jupiter.api.Test;
+
+import javax.inject.Inject;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 
 @QuarkusTest
 public class ApplicationSpecificationResourceTest {
+
+    @Inject
+    @IDaoManagerUser(EntityTypeEnum.USER)
+    private IDao userDaoProducedTest;
 
     @Test
     public void testHelloEndpoint() {
@@ -27,5 +37,9 @@ public class ApplicationSpecificationResourceTest {
                      .body("templateType", is("IT"));
     }
 
-
+    @Test
+    void testFactoryProducerForTest() {
+        //qui inietta UserDaoProducerTest della classe DaoManagerTestFactory anzichè quello della classe DaoManagerFactory
+        ((UserDaoProducerTest) userDaoProducedTest).setPrincipalUserDefaultTemplate("","",null);
+    }
 }
